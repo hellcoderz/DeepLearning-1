@@ -1,0 +1,34 @@
+function [theta, tr_pref, te_perf, J] = logistic_regression(X, y, te_X, te_y, lambda, learning_rate)
+    K = 10;
+    D = size(tr_X, 2);
+
+    lambda = 1.0;
+    theta = zeros(K - 1, D);
+
+    maxIters = 5000;
+    learning_rate = 1e-4;
+
+    fprintf('The Beginning');
+
+    for iter = 1:maxIters
+        [J, grad] = costFunction(tr_X, tr_y, theta, lambda);
+        theta = theta + learning_rate * grad; 
+
+    %     testN = size(te_X, 1);
+    %     predict_prob = zeros(K, testN);
+    % 
+    %     predict_prob(1:K-1, :) = exp(theta * te_X');
+    %     predict_prob(K, :) = ones(1, size(te_X, 1));
+    %     predict_prob = predict_prob ./ repmat(sum(predict_prob), K, 1);
+    % 
+    %     [~, classes] = max(predict_prob);
+        perf = predict_accuracy(te_X, te_y, theta);
+
+        if iter < 20 || mod(iter, 100) == 0
+            fprintf('The %d Iterations, J = %8.5f, training accuracy = %8.5f\n', iter, J, perf);
+        end
+
+    end
+
+end
+
